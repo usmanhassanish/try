@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Input Form</title>
+</head>
+<body>
+    <h2>Add Items to Array</h2>
+    <form id="inputForm">
+        <label for="item">Enter an item:</label>
+        <input type="text" id="item" required>
+        <button type="button" onclick="addItem()">Add Item</button>
+    </form>
+
+    <h2>Items in Array</h2>
+    <ul id="itemList"></ul>
+
+    <h2>Current Array</h2>
+    <pre id="arrayDisplay"></pre>
+
+    <script>
+        // Load itemsArray from local storage if available
+        const storedArray = localStorage.getItem('itemsArray');
+        const itemsArray = storedArray ? JSON.parse(storedArray) : [];
+
+        function saveArrayToLocalStorage() {
+            localStorage.setItem('itemsArray', JSON.stringify(itemsArray));
+        }
+
+        function addItem() {
+            const newItem = document.getElementById("item").value;
+            itemsArray.push(newItem);
+            updateItemList();
+            updateArrayDisplay();
+            saveArrayToLocalStorage();
+        }
+
+        function updateItemList() {
+            const itemList = document.getElementById("itemList");
+            itemList.innerHTML = ""; // Clear the current list
+
+            for (const item of itemsArray) {
+                const li = document.createElement("li");
+                li.appendChild(document.createTextNode(item));
+                itemList.appendChild(li);
+            }
+        }
+
+        function updateArrayDisplay() {
+            const arrayDisplay = document.getElementById("arrayDisplay");
+            arrayDisplay.textContent = JSON.stringify(itemsArray, null, 2);
+        }
+
+        // Initial update when the page loads
+        updateItemList();
+        updateArrayDisplay();
+    </script>
+</body>
+</html>
